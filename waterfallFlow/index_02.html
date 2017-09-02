@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      *{
+        margin:0;
+        padding:0;
+      }
+      .wrap{
+        width: 1440px;
+        height:auto;
+        margin:10px auto;
+
+        overflow: hidden;  /*清除浮动*/
+      }
+      .wrap>ul{
+        float: left;
+
+        width: 350px;
+        height: auto;
+        margin-left:10px;
+
+        list-style: none;
+      }
+    </style>
+    <script src="./js/jquery-3.2.1.min.js"></script>
+
+
+  </head>
+  <body>
+        <div class="wrap">
+            <ul class="list1"></ul>
+            <ul class="list2"></ul>
+            <ul class="list3"></ul>
+            <ul class="list4"></ul>
+        </div>
+  </body>
+  <script type="text/javascript">
+  /***随机函数***/
+  function randFn(min,max){
+    return parseInt(Math.random()*(max-min)+min);
+  }
+  // 屏幕可视区域
+  function seeFn(){
+    return window.innerHeight || document.documentElement.clientHeight;
+  }
+  //滚动卷起的高度
+  function scrollFn(){
+    return document.documentElement.scrollTop || document.body.scrollTop;
+  }
+
+  //向最短的ul标签添加li标签
+  function createLi(n){
+
+    //设置一个变量存放一个最短的ul
+    var ulHeight=$($('ul')[0]);
+    for(var i=0;i<n;i++){
+            // 随机高度
+            var height=randFn(350,500);
+
+            // //创建li标签
+            // var liTag=document.createElement('li');
+            // //配置li标签
+            // liTag.style.width='100%';
+            // liTag.style.height=height+'px';
+            // liTag.style.marginTop='5px';
+            // liTag.style.backgroundColor='#E8E8E8';
+
+            var liTag=$('<li></li>').css({
+              width:'100%',
+              height:height+'px',
+              marginTop:'5px',
+              backgroundColor:'#E8E8E8'
+            });
+
+
+            //图片预加载的函数
+            function pictureLoading(src,src1,parentNode){
+                var imgObj=(function(){
+                  //创建img对象，帮助程序请求图片
+                  var imgObject=new Image();
+                  var imgTag=$('<img/>').attr('src', src1).css({
+                    width:'100%',
+                    marginTop:height/2-150+'px'
+                  });
+                  //拼接标签
+                  parentNode.appendChild(imgTag[0]);
+                  imgObject.onload=function(){
+                    // imgTag.src=this.src;
+                    imgTag.attr('src',this.src).css('marginTop', '0px');
+                  }
+                  return {
+                    src:function(src){
+                        //给image图片对像给正式图
+                        imgObject.src=src;
+                    }
+                  }
+                }());
+                imgObj.src(src);
+            }
+            pictureLoading('https://unsplash.it/350/'+height+'/?random','./images/loading.gif',liTag[0]);
+
+
+            for(var j=0;j<$('ul').length;j++){
+              if(ulHeight.height()>$($('ul')[j]).height()){
+                ulHeight=$($('ul')[j]);
+              }
+            }
+
+          //将li标签拼接到ul中
+          ulHeight.append(liTag);
+
+    }
+  }
+
+    $(document).ready(function(){
+          createLi(20)
+    });
+
+    $(document).scroll(function(){
+      if(seeFn()+scrollFn()>=$(document).height()-30){
+        createLi(15);
+      }
+    });
+
+  </script>
+</html>
