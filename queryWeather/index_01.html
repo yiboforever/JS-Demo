@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      *{
+        margin:0;
+        padding:0;
+      }
+      .wrap{
+        width:960px;
+        margin:20px auto;
+
+      /*  background-color: gray;  /*test color*/
+      }
+      /*头部搜索区域*/
+      .search{
+        width: 100%;
+        height: 35px;
+
+        line-height: 35px;
+        /*background-color: blue;  test color*/
+      }
+      .search input{
+        width: 50%;
+        height: 35px;
+
+        border: none;
+        vertical-align: top;
+        border:1px solid #ccc;
+        text-indent: 6px;
+        box-sizing: border-box;
+      }
+      .search button{
+        width: 15%;
+        height: 35px;
+        margin-left: 150px;
+
+        border:1px solid #666;
+        border-radius:5px;
+        cursor: pointer;
+        outline: none;
+        font-size: 16px;
+        letter-spacing: 4px;
+        font-weight: bold;
+      }
+
+      /*当日天气区域*/
+      .weather{
+        margin:15px 0px;
+      /*  background-color: green;  /*test color*/
+      }
+      .weather-top{
+        width: 100%;
+        height: 80px;
+
+        line-height: 80px;
+      /*  background-color: #ccc;   /*test color*/
+        border-bottom:1px dashed #666;
+        box-sizing: border-box;
+      }
+      .weather-top label{
+            font-size: 18px;
+      }
+      #address{
+        display: inline-block;
+
+        width: 150px;
+        height: 80px;
+        margin-left: 10px;
+
+        font-size:24px;
+        font-weight: bold;
+        vertical-align: top;
+      }
+      #today{
+        float: right;
+
+        width: 300px;
+        height: 80px;
+        margin-right: 20px;
+
+        font-size:18px;
+      }
+      .weather-show{
+        height: 105px;
+
+        line-height: 105px;
+        font-size:45px;
+      }
+      #min{
+        color:blue;
+      }
+      #max{
+        color:#FF6600;
+      }
+      #status{
+        margin-left: 30px;
+      }
+
+      /*未来6天气象*/
+      .feature{
+        overflow: hidden;
+      }
+      .feature h3{
+        height: 75px;
+
+        line-height: 75px;
+        font-size: 45px;
+        border-bottom:1px dashed #666;
+      }
+      .list{
+        width: 100%;
+        height: 230px;
+        margin-top:30px;
+
+        text-align: left;
+        list-style: none;
+        /*background-color: #ff0;  test color*/
+      }
+      .list li{
+            float: left;
+
+            width: 16.5%;
+            height: 230px;
+      }
+      .list li span{
+        display: block;
+
+        width: 100%;
+        height: 35px;
+        margin-bottom: 10px;
+      }
+      /*天气图片*/
+      .list li label{
+        display: inline-block;
+        position: relative;
+
+        width:100%;
+        height: 90px;
+        line-height: 90px;
+        /*background-color:  #ccc;  test color*/
+      }
+      .list li label img{
+          /*position: absolute;
+          left: 50%;
+          top:50%;*/
+
+          vertical-align: middle;
+      }
+
+    </style>
+
+    <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      //第一步：先获取默认的北京的时间及天气数据
+      //设置默认城市为北京
+      $('#address').text('北京');
+      //创建时间的对象的函数
+      function createDate(){
+        var date=new Date();
+        return date.getFullYear()+'年'+(date.getMonth()+1)+'月'+date.getDate()+'日';
+      }
+      //设置时间
+      $('#today').text(createDate());
+      //设置初始开始时的，北京的天气情况
+      $.get('http://wthrcdn.etouch.cn/weather_mini?city=北京',function(data){
+        // console.log(data);
+        $('#max').text(data.data.forecast[0].high.slice(3))
+        $('#min').text(data.data.forecast[0].low.slice(3))
+        //未来6天的天气情况
+        //0
+        $('.date:eq(0)').text(data.data.yesterday.date);
+        $('.high:eq(0)').text(data.data.yesterday.high.slice(3));
+        $('.low:eq(0)').text(data.data.yesterday.low.slice(3));
+        for(var index of weatherObj){
+          if(index.type == data.data.yesterday.type){
+            $('.list img:eq(0)').attr('src', index.imgUrl);
+          }
+        }
+        //1-5
+        //设置今天及其5天
+        for(var index in data.data.forecast){
+          $($('.date')[Number(index)+1]).text(data.data.forecast[index].date);
+          $($('.high')[Number(index)+1]).text(data.data.forecast[index].high);
+          $($('.low')[Number(index)+1]).text(data.data.forecast[index].low);
+          for(var inde of weatherObj){
+            if(inde.type == data.data.forecast[index].type){
+              $('.list img:eq('+(Number(index)+1)+')').attr('src', inde.imgUrl);
+            }
+          }
+        }
+
+      },'json');
+
+      $('button').click(function(){
+        var cityData=$('.search input').val();
+        $.getJSON('http://wthrcdn.etouch.cn/weather_mini?city='+cityData,function(data){
+          console.log(data);
+          if(data.data){
+            //设置当前城市，从输入框获取
+            $('#address').text(cityData);
+            //设置当天的天气
+            $('#max').text(data.data.forecast[0].high.slice(3));
+            $('#min').text(data.data.forecast[0].low.slice(3));
+            //设置昨天的天气
+            $('.date:eq(0)').text(data.data.yesterday.date);
+            $('.high:eq(0)').text(data.data.yesterday.high.slice(3));
+            $('.low:eq(0)').text(data.data.yesterday.low.slice(3));
+            //设置今天及其5天
+            for(var index in data.data.forecast){
+              $($('.date')[Number(index)+1]).text(data.data.forecast[index].date);
+              $($('.high')[Number(index)+1]).text(data.data.forecast[index].high);
+              $($('.low')[Number(index)+1]).text(data.data.forecast[index].low);
+              for(var inde of weatherObj){
+                if(inde.type == data.data.forecast[index].type){
+                  $('.list img:eq('+(Number(index)+1)+')').attr('src', inde.imgUrl);
+                }
+              }
+            }
+          }else{
+            alert('您输入的城市出错！，请重新输入');
+          }
+
+        })
+
+      });
+
+      //设置一个对象承载一个天气图片
+      var weatherObj=[
+        {
+          type:"大雨",
+          imgUrl:"./images/1.ico"
+        },
+        {
+          type:"多云",
+          imgUrl:"./images/2.ico"
+        },
+        {
+          type:"雷阵雨",
+          imgUrl:"./images/3.ico"
+        },
+        {
+          type:"晴",
+          imgUrl:"./images/4.ico"
+        },
+        {
+          type:"小雨",
+          imgUrl:"./images/5.ico"
+        },
+        {
+          type:"阴",
+          imgUrl:"./images/6.ico"
+        },
+        {
+          type:"阵雨",
+          imgUrl:"./images/7.ico"
+        },
+        {
+          type:"中雨",
+          imgUrl:"./images/8.ico"
+        },
+        {
+          type:"小到中雨",
+          imgUrl:"./images/8.ico"
+        }
+      ];
+
+      });
+
+
+
+
+    </script>
+  </head>
+  <body>
+    <!-- 外部框架区域 -->
+    <div class="wrap">
+      <!-- 头部搜索区域 -->
+      <div class="search">
+        <input type="text" placeholder="请输入城市名"/>
+        <button type="button">查询</button>
+      </div>
+
+      <!-- 当日天气区域 -->
+      <div class="weather">
+        <div class="weather-top">
+          <label>当前城市</label>
+          <span id="address"></span>
+          <span id="today"></span>
+        </div>
+        <div class="weather-show">
+          <span id="min"></span>
+          <span>~</span>
+          <span id="max"></span>
+          <span id="status"></span>
+        </div>
+      </div>
+
+      <!-- 未来6天气象 -->
+      <div class="feature">
+        <h3>未来七日气象</h3>
+        <ul class="list">
+            <li>
+              <span class="date"></span>
+              <span class="high"></span>
+              <span class="low"></span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date"></span>
+              <span class="high"></span>
+              <span class="low"></span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date"></span>
+              <span class="high"></span>
+              <span class="low"></span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date"></span>
+              <span class="high"></span>
+              <span class="low"></span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date"></span>
+              <span class="high"></span>
+              <span class="low"></span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date"></span>
+              <span class="high"></span>
+              <span class="low"></span>
+              <label><img src="#" /></label>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

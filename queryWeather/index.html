@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      *{
+        margin:0;
+        padding:0;
+      }
+      .wrap{
+        width:960px;
+        margin:20px auto;
+
+      /*  background-color: gray;  /*test color*/
+      }
+      /*头部搜索区域*/
+      .search{
+        width: 100%;
+        height: 35px;
+
+        line-height: 35px;
+        /*background-color: blue;  test color*/
+      }
+      .search input{
+        width: 50%;
+        height: 35px;
+
+        border: none;
+        vertical-align: top;
+        border:1px solid #ccc;
+        text-indent: 6px;
+        box-sizing: border-box;
+      }
+      .search button{
+        width: 15%;
+        height: 35px;
+        margin-left: 150px;
+
+        border:1px solid #666;
+        border-radius:5px;
+        cursor: pointer;
+        outline: none;
+        font-size: 16px;
+        letter-spacing: 4px;
+        font-weight: bold;
+      }
+
+      /*当日天气区域*/
+      .weather{
+        margin:15px 0px;
+      /*  background-color: green;  /*test color*/
+      }
+      .weather-top{
+        width: 100%;
+        height: 80px;
+
+        line-height: 80px;
+      /*  background-color: #ccc;   /*test color*/
+        border-bottom:1px dashed #666;
+        box-sizing: border-box;
+      }
+      .weather-top label{
+            font-size: 18px;
+      }
+      #address{
+        display: inline-block;
+
+        width: 150px;
+        height: 80px;
+        margin-left: 10px;
+
+        font-size:24px;
+        font-weight: bold;
+        vertical-align: top;
+      }
+      #today{
+        float: right;
+
+        width: 300px;
+        height: 80px;
+        margin-right: 20px;
+
+        font-size:18px;
+      }
+      .weather-show{
+        height: 105px;
+
+        line-height: 105px;
+        font-size:45px;
+      }
+      #min{
+        color:blue;
+      }
+      #max{
+        color:#FF6600;
+      }
+      #status{
+        margin-left: 30px;
+      }
+
+      /*未来6天气象*/
+      .feature{
+        overflow: hidden;
+      }
+      .feature h3{
+        height: 75px;
+
+        line-height: 75px;
+        font-size: 45px;
+        border-bottom:1px dashed #666;
+      }
+      .list{
+        width: 100%;
+        height: 230px;
+        margin-top:30px;
+
+        text-align: left;
+        list-style: none;
+        /*background-color: #ff0;  test color*/
+      }
+      .list li{
+            float: left;
+
+            width: 16.5%;
+            height: 230px;
+      }
+      .list li span{
+        display: block;
+
+        width: 100%;
+        height: 35px;
+        margin-bottom: 10px;
+      }
+      /*天气图片*/
+      .list li label{
+        display: inline-block;
+        position: relative;
+
+        width:100%;
+        height: 90px;
+        line-height: 90px;
+        /*background-color:  #ccc;  test color*/
+      }
+      .list li label img{
+          /*position: absolute;
+          left: 50%;
+          top:50%;*/
+
+          vertical-align: middle;
+      }
+
+    </style>
+
+    <script src="./js/homeWork_01.js"></script>
+  </head>
+  <body>
+    <!-- 外部框架区域 -->
+    <div class="wrap">
+      <!-- 头部搜索区域 -->
+      <div class="search">
+        <input type="text" placeholder="请输入城市名"/>
+        <button type="button">查询</button>
+      </div>
+
+      <!-- 当日天气区域 -->
+      <div class="weather">
+        <div class="weather-top">
+          <label>当前城市</label>
+          <span id="address"></span>
+          <span id="today"></span>
+        </div>
+        <div class="weather-show">
+          <span id="min"></span>
+          <span>~</span>
+          <span id="max"></span>
+          <span id="status"></span>
+        </div>
+      </div>
+
+      <!-- 未来6天气象 -->
+      <div class="feature">
+        <h3>未来七日气象</h3>
+        <ul class="list">
+            <li>
+              <span class="date">28日星期一</span>
+              <span class="high">33</span>
+              <span class="low">26</span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date">28日星期一</span>
+              <span class="high">33</span>
+              <span class="low">26</span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date">28日星期一</span>
+              <span class="high">33</span>
+              <span class="low">26</span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date">28日星期一</span>
+              <span class="high">33</span>
+              <span class="low">26</span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date">28日星期一</span>
+              <span class="high">33</span>
+              <span class="low">26</span>
+              <label><img src="#" /></label>
+            </li>
+            <li>
+              <span class="date">28日星期一</span>
+              <span class="high">33</span>
+              <span class="low">26</span>
+              <label><img src="#" /></label>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
