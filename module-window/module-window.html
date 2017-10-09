@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style media="screen">
+      *{
+        margin:0;
+        padding:0;
+      }
+      /*设置模态内容块的相关参数*/
+      .show-part{
+        width: 400px;
+        height: 200px;
+
+        border-radius:4px;
+        box-shadow:0 0 5px gray;
+        background-color: #fff;
+
+      }
+      .show-part a{
+        float: right;
+
+        margin-right: 5px;
+
+        color: #000;
+        text-decoration:none;
+        font-size:30px;
+      }
+    </style>
+    <script type="text/javascript">
+      window.onload=function(){
+        //获取需要操作文本节点
+        var popUp=document.querySelector('.pop-up');
+        var showPart=document.querySelector('.show-part');
+        //触发弹框对象
+        var btn=document.querySelector('button');
+        //获取X的a标签
+        var del=document.querySelector('.show-part>a');
+
+        //第一步：设置模态弹框初始状态
+        startFn();
+        //第二步：触发弹框对象，将弹框容器显示
+        btn.onclick=function(){
+            //触发弹框对象，显示模态弹窗
+            popUp.style.display='block';
+            showPart.style.display='block';
+            //因为showPart为none使取offsetWidth/offsetHeight无效，故定位失效,故显示时将内容块定位居中
+            //获取内容块的宽高
+            var showWidth=showPart.offsetWidth;
+            var showHeight=showPart.offsetHeight;
+            showPart.style.marginLeft=-showWidth/2 + 'px';
+            showPart.style.marginTop=-showHeight/2 + 'px';
+        }
+        //第三步，隐藏弹框容器(1):通过X来隐藏
+        del.onclick=function(ev){
+          showPart.style.display='none';
+          popUp.style.display='none';
+          //取消a标签的默认事件
+          return false;
+        }
+        //第四步，隐藏弹框容器(2):通过触发除内容区域块外的部分来隐藏;
+        //思路：在内容区域块，阻止事件冒泡，在模态容器注册事件函数
+        showPart.onclick=function(ev){
+          var e=ev || window.event;
+          e.stopPropagation();
+        }
+        popUp.onclick=function(){
+          showPart.style.display='none';
+          popUp.style.display='none';
+        }
+
+
+        //模态弹框初始状态
+        function startFn(){
+          //设置弹框容器的宽高颜色背景等
+          var width=window.innerWidth;
+          var height=window.innerHeight;
+          popUp.style.width=width+'px';
+          popUp.style.height=height+'px';
+          //设置模态容器的背景颜色
+          popUp.style.backgroundColor='rgba(52, 48, 48, 0.36)';
+          popUp.style.overflow='hidden';
+          popUp.style.position='absolute';
+          popUp.style.left='0';
+          popUp.style.top='0';
+          popUp.style.zIndex=1000;
+          //初始为隐藏
+          popUp.style.display='none';
+
+          //设置弹框内容区域居中
+          showPart.style.position='absolute';
+          showPart.style.left='50%';
+          showPart.style.top='50%';
+          //初始为隐藏
+          showPart.style.display='none';
+        }
+
+
+
+        // 隐藏内容区域块的函数
+        function hideFn(){
+          showPart.style.display='none';
+          popUp.style.display='none';
+        }
+
+
+      }
+    </script>
+  </head>
+  <body>
+    <!-- 触发弹框对象 -->
+    <button type="button" name="button">点我</button>
+
+    <!-- 弹框部分区域 -->
+    <div class="pop-up">
+      <div class="show-part">
+          <a href="#"><span class="fa fa-times"></span></a>
+      </div>
+    </div>
+  </body>
+</html>
